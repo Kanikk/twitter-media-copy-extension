@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "Twitter Media Copy Downloader",
+    "name": "Twitter Media Copier",
     "version": "1.0",
     "description": "Add icon to copy photos and download videos from Twitter using the one-click download button.",
     "permissions": [
