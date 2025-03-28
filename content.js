@@ -5,33 +5,50 @@ function addDownloadIcons() {
         const mediaContainer = tweet.querySelector('[data-testid="tweetPhoto"]');
         const images = mediaContainer ? Array.from(mediaContainer.querySelectorAll('img')) : [];
         const video = tweet.querySelector('video');
-        const bookmarkButton = tweet.querySelector('[data-testid="bookmark"]');
+        const bookmarkContainer = tweet.querySelector('[data-testid="bookmark"]')?.parentElement;
 
-        if ((images.length > 0 || video) && bookmarkButton && !tweet.querySelector('.download-icon')) {
+        if ((images.length > 0 || video) && bookmarkContainer && !tweet.querySelector('.download-icon')) {
+            // Tworzenie nowego przycisku pobierania
+            const downloadContainer = document.createElement('div');
+            downloadContainer.className = 'css-175oi2r r-18u37iz r-1h0z5md r-1wron08';
+
             const downloadButton = document.createElement('button');
-            downloadButton.className = 'download-icon';
-            downloadButton.setAttribute('aria-label', images.length > 0 ? 'Copy images to clipboard' : 'Copy video link and open downloader');
+            downloadButton.className = 'css-175oi2r r-1777fci r-bt1l66 r-bztko3 r-lrvibr r-1loqt21 r-1ny4l3l download-icon';
+            downloadButton.type = 'button';
+            downloadButton.setAttribute('aria-label', images.length > 0 ? 'Download images' : 'Download video');
+            downloadButton.setAttribute('role', 'button');
 
-            const bookmarkStyles = window.getComputedStyle(bookmarkButton);
-            downloadButton.style.cssText = bookmarkStyles.cssText;
-            downloadButton.style.background = 'none';
-            downloadButton.style.border = 'none';
-            downloadButton.style.padding = '0';
-            downloadButton.style.cursor = 'pointer';
-            downloadButton.style.marginLeft = '10px';
+            const innerDiv = document.createElement('div');
+            innerDiv.className = 'css-146c3p1 r-bcqeeo r-1ttztb7 r-qvutc0 r-37j5jr r-a023e6 r-rjixqe r-16dba41 r-1awozwy r-6koalj r-1h0z5md r-o7ynqc r-clp7b1 r-3s2u2q';
+            innerDiv.style.color = 'rgb(113, 118, 123)';
 
-            const bookmarkColor = bookmarkStyles.color || 'rgb(113, 118, 123)';
-            downloadButton.style.color = bookmarkColor;
+            const iconContainer = document.createElement('div');
+            iconContainer.className = 'css-175oi2r r-xoduu5';
 
-            downloadButton.innerHTML = `
-            <svg viewBox="0 0 24 24" aria-hidden="true" class="r-4qtqp9 r-yyyyoo r-1xvli5t r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-1nao33i r-1q142lx">
-                <g>
-                    <path d="M18.36 5.64c-1.95-1.96-5.11-1.96-7.07 0L9.88 7.05 8.46 5.64l1.42-1.42c2.73-2.73 7.16-2.73 9.9 0 2.73 2.74 2.73 7.17 0 9.9l-1.42 1.42-1.41-1.42 1.41-1.41c1.96-1.96 1.96-5.12 0-7.07zm-2.12 3.53l-7.07 7.07-1.41-1.41 7.07-7.07 1.41 1.41zm-12.02.71l1.42-1.42 1.41 1.42-1.41 1.41c-1.96 1.96-1.96 5.12 0 7.07 1.95 1.96 5.11 1.96 7.07 0l1.41-1.41 1.42 1.41-1.42 1.42c-2.73 2.73-7.16 2.73-9.9 0-2.73-2.74-2.73-7.17 0-9.9z"></path>
-                </g>
-            </svg>
-            `;
+            const downloadIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            downloadIcon.setAttribute('viewBox', '0 0 24 24');
+            downloadIcon.classList.add('r-4qtqp9', 'r-yyyyoo', 'r-dnmrzs', 'r-bnwqim', 'r-lrvibr', 'r-m6rgpd', 'r-1xvli5t', 'r-1hdv0qi');
+            downloadIcon.setAttribute('aria-hidden', 'true');
 
-            bookmarkButton.parentNode.insertBefore(downloadButton, bookmarkButton.nextSibling);
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', 'M18.36 5.64c-1.95-1.96-5.11-1.96-7.07 0L9.88 7.05 8.46 5.64l1.42-1.42c2.73-2.73 7.16-2.73 9.9 0 2.73 2.74 2.73 7.17 0 9.9l-1.42 1.42-1.41-1.42 1.41-1.41c1.96-1.96 1.96-5.12 0-7.07zm-2.12 3.53l-7.07 7.07-1.41-1.41 7.07-7.07 1.41 1.41zm-12.02.71l1.42-1.42 1.41 1.42-1.41 1.41c-1.96 1.96-1.96 5.12 0 7.07 1.95 1.96 5.11 1.96 7.07 0l1.41-1.41 1.42 1.41-1.42 1.42c-2.73 2.73-7.16 2.73-9.9 0-2.73-2.74-2.73-7.17 0-9.9z');
+
+            downloadIcon.appendChild(path);
+            iconContainer.appendChild(downloadIcon);
+            innerDiv.appendChild(iconContainer);
+            downloadButton.appendChild(innerDiv);
+            downloadContainer.appendChild(downloadButton);
+
+            downloadButton.style.transition = 'background-color 0.2s ease-in-out';
+            downloadButton.addEventListener('mouseenter', () => {
+                innerDiv.style.color = 'rgb(29, 155, 240)';
+            });
+            downloadButton.addEventListener('mouseleave', () => {
+                innerDiv.style.color = 'rgb(113, 118, 123)';
+            });
+
+            const parentGroup = bookmarkContainer.parentElement;
+            parentGroup.insertBefore(downloadContainer, bookmarkContainer.nextSibling);
 
             downloadButton.addEventListener('click', () => {
                 if (images.length > 0) {
