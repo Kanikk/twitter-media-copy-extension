@@ -8,7 +8,6 @@ function addDownloadIcons() {
         const bookmarkContainer = tweet.querySelector('[data-testid="bookmark"]')?.parentElement;
 
         if ((images.length > 0 || video) && bookmarkContainer && !tweet.querySelector('.download-icon')) {
-            // Tworzenie nowego przycisku pobierania
             const downloadContainer = document.createElement('div');
             downloadContainer.className = 'css-175oi2r r-18u37iz r-1h0z5md r-1wron08';
 
